@@ -255,12 +255,13 @@
 	            const musicOnSrc = 'https://raw.githubusercontent.com/pppppppppp2/pet-memorial/main/icons/music-on.svg';
                 const musicOffSrc = 'https://raw.githubusercontent.com/pppppppppp2/pet-memorial/main/icons/music-off.svg';
 
-	            // 页面加载完成后尝试播放音乐
-	            playMusic();
-
-	            function setMusicIcon(isPlaying) {
+	            // 设置音乐图标状态
+                function setMusicIcon(isPlaying) {
                     musicIcon.src = isPlaying ? musicOnSrc : musicOffSrc;
                 }
+            
+                // 初始化时显示关闭状态
+                setMusicIcon(false);
 
 	            musicToggle.addEventListener('click', function() {
 	                if (bgMusic.paused) {
