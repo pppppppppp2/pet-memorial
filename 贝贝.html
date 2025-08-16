@@ -91,8 +91,8 @@
 	        /* 宠物基本信息 */
 	        .pet-info {
 	            position: absolute;
-	            bottom: 28px;
-	            left: 32px;
+	            bottom: 32px;
+	            left: 24px;
 	            color: white;
 	            z-index: 5;
 	            text-align: left;
@@ -239,7 +239,7 @@
 	            <div class="footer-wrapper">
 	                <div class="footer">
 	                    <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/logo.svg" alt="logo" class="brand-logo">
-	                    <span class="copyright-text">c 2025 Purr Land All Rights Reserved</span>
+	                    <span class="copyright-text">© 2025 Purr Land All Rights Reserved</span>
 	                </div>
 	            </div>
 	        </div>
@@ -295,9 +295,9 @@
 
 				function handleMusicToggle() {
     				if (bgMusic.paused) {
-						setMusicIcon(true);
         				const playPromise = bgMusic.play();
-						if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
+                        setMusicIcon(true);
+                        if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
         
         				if (playPromise !== undefined) {
             				playPromise.then(() => {
@@ -312,8 +312,8 @@
             				});
         				}
     				} else {
-						bgMusic.pause()
-						setMusicIcon(false);
+                        bgMusic.pause()
+                        setMusicIcon(false);
         				// 暂停处理
     				}
 				}
