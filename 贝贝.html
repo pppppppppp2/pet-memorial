@@ -304,11 +304,7 @@
                 				// 播放成功处理
             				}).catch(error => {
                 				// 提供用户手动修复选项
-                				if (confirm('音乐播放被阻止，是否尝试手动启用？')) {
-                    				bgMusic.play().catch(e => {
-                        				showStatusMessage('播放失败: ' + e.message);
-                    				});
-                				}
+            
             				});
         				}
     				} else {
