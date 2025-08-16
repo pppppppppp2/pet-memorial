@@ -83,17 +83,21 @@
                 height: 24px;
                 display: block;
             }
+			.music-toggle:active {
+                transform: scale(0.95);
+            	transition: transform 0.1s;
+			}
 	        /* 宠物基本信息 */
 	        .pet-info {
 	            position: absolute;
-	            bottom: 30px;
-	            left: 30px;
+	            bottom: 28px;
+	            left: 32px;
 	            color: white;
 	            z-index: 5;
 	            text-align: left;
 	            display: flex;
 	            flex-direction: column;
-	            gap: 8px;
+	            gap: 6px;
 	        }
 	        .pet-name {
 	           color: var(---2, #CEEB9E);
@@ -113,7 +117,7 @@
                text-transform: capitalize;
                display: flex;
                flex-direction: column;
-               gap: 8px; /* 增加行间距 */
+               gap: 4px; /* 增加行间距 */
 			}
 			.pet-meta {
 				display: flex;
@@ -128,7 +132,7 @@
 			}
 	        /* 底部文字描述区域 */
 	        .description {
-	            padding: 30px 30px;
+	            padding: 24px 30px;
 	            text-align: center;
 	            background-color: #fff;
 	            position: relative;
@@ -262,19 +266,52 @@
                 // 初始化时显示关闭状态
                 setMusicIcon(false);
 
-	            musicToggle.addEventListener('touch', function() {
-	                if (bgMusic.paused) {
-	                    bgMusic.play().then(function() {
-	                        setMusicIcon(true);
-	                        if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
-	                    }).catch(function(error) {
-	                        console.log('播放失败:', error);
-	                    });
-	                } else {
-	                    bgMusic.pause();
-	                    setMusicIcon(false);
-	                }
-	            });
+	            //musicToggle.addEventListener('touch', function() {
+	            //    if (bgMusic.paused) {
+	            //        bgMusic.play().then(function() {
+	            //            setMusicIcon(true);
+	            //            if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
+	            //        }).catch(function(error) {
+	            //            console.log('播放失败:', error);
+	            //        });
+	            //    } else {
+	            //        bgMusic.pause();
+	            //        setMusicIcon(false);
+	            //    }
+	            //});
+
+				// 使用touch事件代替click
+				musicToggle.addEventListener('touchstart', function(e) {
+    				e.preventDefault();
+    				touchStartTime = Date.now();
+				});
+
+				musicToggle.addEventListener('touchend', function(e) {
+    				e.preventDefault();
+    				if (Date.now() - touchStartTime > 500) return;
+                    handleMusicToggle();
+				});
+
+				function handleMusicToggle() {
+    				if (bgMusic.paused) {
+        				const playPromise = bgMusic.play();
+        
+        				if (playPromise !== undefined) {
+            				playPromise.then(() => {
+                				// 播放成功处理
+            				}).catch(error => {
+                				// 提供用户手动修复选项
+                				if (confirm('音乐播放被阻止，是否尝试手动启用？')) {
+                    				bgMusic.play().catch(e => {
+                        				showStatusMessage('播放失败: ' + e.message);
+                    				});
+                				}
+            				});
+        				}
+    				} else {
+        				// 暂停处理
+    				}
+				}
 
 	            // 自动播放时设置图标
 	            function playMusic() {
