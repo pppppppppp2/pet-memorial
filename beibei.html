@@ -140,9 +140,9 @@
 	            z-index: 2;
 	        }
 	        .description-text {
-                color: var(---2, #3D3323);
+                color: var(---color2, #3D3323);
                 text-align: center;
-                font-size: 14px;
+                font-size: 15px;
                 font-style: normal;
                 font-weight: 400;
                 line-height: 160%; /* 22.4px */
@@ -207,24 +207,24 @@
 	            <div class="image-overlay"></div>
 	            <!-- 音乐开关 -->
 	            <div class="music-toggle" id="musicToggle">
-    <span class="music-tip">点击听听ta的呼噜声 👉</span>
-    <img
-      id="musicIcon"
-      src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-on.svg"
-      alt="音乐开关"
-      style="width:24px;height:24px;"
-    >
-</div>
+                <!-- <span class="music-tip">点击听听ta的呼噜声 👉</span> -->
+                <img
+                  id="musicIcon"
+                  src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-on.svg"
+                  alt="音乐开关"
+                  style="width:24px;height:24px;"
+                >
+                </div>
 	            <!-- 宠物基本信息 - 左下角且左对齐 -->
 	            <div class="pet-info">
 	                <div class="pet-name">贝贝</div>
 	                <div class="pet-details">
 	                    <div> 2014/03/16 ～ 2024/08/15</div>
-	                    <div class="pet-meta">
+	                    <!-- <div class="pet-meta">
 	                        <span>中华田园犬</span>
 	                        <span class="meta-divider"></span>
 	                        <span>男孩</span>
-	                    </div>
+	                    </div> -->
 	                </div>
 	            </div>
 	        </div>
@@ -247,7 +247,6 @@
 	    <!-- 背景音乐 -->
 	    <audio id="bgMusic" loop>
 	        <source src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/Rememberme.mp3" type="audio/mpeg">
-	        您的浏览器不支持音频元素。
 	    </audio>
 	    <script>
 	        document.addEventListener('DOMContentLoaded', function() {
@@ -255,9 +254,9 @@
 	            const bgMusic = document.getElementById('bgMusic');
 	            const musicToggle = document.getElementById('musicToggle');
 	            const musicIcon = document.getElementById('musicIcon');
-	            const musicTip = document.querySelector('.music-tip');
 	            const musicOnSrc = 'https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-on.svg';
                 const musicOffSrc = 'https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-off.svg';
+				let isMusicPlaying = false;
 
 	            // 设置音乐图标状态
                 function setMusicIcon(isPlaying) {
@@ -267,66 +266,66 @@
                 // 初始化时显示关闭状态
                 setMusicIcon(false);
 
-	            //musicToggle.addEventListener('touch', function() {
-	            //    if (bgMusic.paused) {
-	            //        bgMusic.play().then(function() {
-	            //            setMusicIcon(true);
-	            //            if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
-	            //        }).catch(function(error) {
-	            //            console.log('播放失败:', error);
-	            //        });
-	            //    } else {
-	            //        bgMusic.pause();
-	            //        setMusicIcon(false);
-	            //    }
-	            //});
+				// 点击事件处理
+        		musicToggle.addEventListener('click', function() {
+        		    if (isMusicPlaying) {
+        		        bgMusic.pause();
+        		        setMusicIcon(false);
+        		    } else {
+        		        bgMusic.play().catch(e => {
+        		            console.log('自动播放被阻止，需要用户交互才能播放音乐', e);
+        		        });
+        		        setMusicIcon(true);
+        		    }
+        		    isMusicPlaying = !isMusicPlaying;
+        		});
 
 				// 使用touch事件代替click
-				musicToggle.addEventListener('touchstart', function(e) {
-    				e.preventDefault();
-    				touchStartTime = Date.now();
-				});
+				//musicToggle.addEventListener('touchstart', function(e) {
+    			//	e.preventDefault();
+    			//	touchStartTime = Date.now();
+				//});
 
-				musicToggle.addEventListener('touchend', function(e) {
-    				e.preventDefault();
-    				if (Date.now() - touchStartTime > 500) return;
-                    handleMusicToggle();
-				});
+				//musicToggle.addEventListener('touchend', function(e) {
+    			//	e.preventDefault();
+    			//	if (Date.now() - touchStartTime > 500) return;
+                //    handleMusicToggle();
+				//});
 
-				function handleMusicToggle() {
-    				if (bgMusic.paused) {
-        				const playPromise = bgMusic.play();
-                        setMusicIcon(true);
-                        if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
-        
-        				if (playPromise !== undefined) {
-            				playPromise.then(() => {
-                				// 播放成功处理
-            				}).catch(error => {
-                				// 提供用户手动修复选项
-                				if (confirm('音乐播放被阻止，是否尝试手动启用？')) {
-                    				bgMusic.play().catch(e => {
-                        				showStatusMessage('播放失败: ' + e.message);
-                    				});
-                				}
-            				});
-        				}
-    				} else {
-                        bgMusic.pause()
-                        setMusicIcon(false);
-        				// 暂停处理
-    				}
-				}
+				//function handleMusicToggle() {
+    			//	if (bgMusic.paused) {
+        		//		const playPromise = bgMusic.play();
+                //        setMusicIcon(true);
+                //        if (musicTip) musicTip.style.display = 'none'; // 隐藏提示
+        //
+        		//		if (playPromise !== undefined) {
+            	//			playPromise.then(() => {
+                //				// 播放成功处理
+            	//			}).catch(error => {
+                //				// 提供用户手动修复选项
+                //				if (confirm('音乐播放被阻止，是否尝试手动启用？')) {
+                //    				bgMusic.play().catch(e => {
+                //        				showStatusMessage('播放失败: ' + e.message);
+                //    				});
+                //				}
+            	//			});
+        		//		}
+    			//	} else {
+                //        bgMusic.pause()
+                //        setMusicIcon(false);
+        		//		// 暂停处理
+    			//	}
+				//}
 
 	            // 自动播放时设置图标
-	            function playMusic() {
-	                bgMusic.play().then(function() {
-	                    setMusicIcon(true);
-	                }).catch(function(error) {
-	                    setMusicIcon(false);
-	                    console.log('自动播放失败:', error);
-	                });
-	            }
+	            //function playMusic() {
+	            //    bgMusic.play().then(function() {
+	            //        setMusicIcon(true);
+	            //    }).catch(function(error) {
+	            //        setMusicIcon(false);
+	            //        console.log('自动播放失败:', error);
+	            //    });
+	            //}
 
 	            // 处理图片加载和裁剪
 	            const petImage = document.querySelector('.pet-image');
