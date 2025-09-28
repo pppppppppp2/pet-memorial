@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	    <title>pet-memorial - beibei</title>
+	    <style>
+	        * {
+	            margin: 0;
+	            padding: 0;
+	            box-sizing: border-box;
+	            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+	        }
+	        body {
+	            background-color: #fff;
+	            color: #333;
+	            overflow-x: hidden;
+	        }
+	        .container {
+	            width: 100%;
+	            max-width: 100vw;
+	            min-height: 100vh;
+	            display: flex;
+	            flex-direction: column;
+	        }
+	        /* 顶部固定区域 */
+	        .header {
+	            position: relative;
+	            top: 0;
+	            left: 0;
+	            width: 100%;
+	            padding: 15px 20px;
+	            display: flex;
+	            justify-content: center;
+	            align-items: center;
+	            z-index: 100;
+	        }
+	        .header-icon {
+	            width: 160px;
+	            height: 20px;
+	        }
+			/* 中间图片区域 */
+	        .image-wrapper {
+                width: 95%;
+                margin: 0 auto;
+				border-radius: 16px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            .image-container {
+                position: relative;
+                width: 100%;  /* 改为 100%，因为父元素已经控制宽度 */
+                height: 600px;
+                border-radius: 16px;
+                overflow: hidden; /* 仍然可以裁剪内部内容 */
+            }
+	        .pet-image {
+	            width: 100%;
+	            height: 100%;
+	            object-fit: cover;
+	            object-position: center;
+	        }
+	        /* 图片底部渐变遮罩 */
+	        .image-overlay {
+	            position: absolute;
+	            bottom: 0;
+	            left: 0;
+	            width: 100%;
+	            height: 100px;
+	            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+	            pointer-events: none;
+	        }
+	        /* 音乐开关 */
+	        .music-toggle {
+	            position: absolute;
+	            top: 15px;
+	            right: 20px;
+	            width: auto;
+	            height: 40px;
+	            display: flex;
+	            flex-direction: row;
+	            justify-content: center;
+	            align-items: center;
+	            cursor: pointer;
+	            z-index: 20;
+	        }
+	        .music-toggle img {
+                width: 24px;
+                height: 24px;
+                display: block;
+            }
+			.music-toggle:active {
+                transform: scale(0.95);
+            	transition: transform 0.1s;
+			}
+	        /* 宠物基本信息 */
+	        .pet-info {
+	            position: absolute;
+	            bottom: 32px;
+	            left: 24px;
+	            color: white;
+	            z-index: 5;
+	            text-align: left;
+	            display: flex;
+	            flex-direction: column;
+	            gap: 6px;
+	        }
+	        .pet-name {
+	           color: var(---2, #CEEB9E);
+               text-shadow: 0 1px 1px rgba(0, 0, 0, 0.30);
+               font-size: 28px;
+               font-style: normal;
+               font-weight: 700;
+               line-height: normal;
+               text-transform: capitalize;
+	        }
+	        .pet-details {
+               color: #FFF;
+               font-size: 14px;
+               font-style: normal;
+               font-weight: 400;
+               line-height: normal;
+               text-transform: capitalize;
+               display: flex;
+               flex-direction: column;
+			}
+	        /* 底部文字描述区域 */
+	        .description {
+	            padding: 24px 30px;
+	            text-align: center;
+	            position: relative;
+	            z-index: 2;
+	        }
+	        .description-text {
+                color: var(---color2, #3D3323);
+                text-align: center;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 160%; /* 22.4px */
+				letter-spacing: 1.4px;
+	        }
+			.brand-logo {
+	            width: 85px;
+	            height: 20px;
+	            margin-bottom: 5px;
+	        }
+			.copyright-text {
+                opacity: 0.3;
+				white-space: nowrap;
+			}
+	        .footer {
+                color: var(---2, #3D3323);
+                text-align: center;
+                font-family: "Helvetica Neue";
+                font-size: 11px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 160%; /* 17.6px */
+                text-transform: capitalize;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+	        }
+			.footer-wrapper {
+				margin-top: 50px;
+			}
+
+			/* 星系容器 - 修改z-index和背景色 */
+            .galaxy-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 4;
+                pointer-events: none;
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0); /* 降低背景透明度 */
+            }
+            
+            /* 星星样式 - 增加大小和亮度 */
+            .star {
+                position: absolute;
+                background-color: #fff;
+                border-radius: 50%;
+				box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8), 
+                            0 0 6px 1px rgba(255, 255, 255, 0.6),
+                            0 0 20px 2px rgba(255, 255, 255, 0.2);
+                filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
+                width: 1px;
+                height: 1px;
+            }
+            
+            /* 闪烁动画 - 增强对比度 */
+            @keyframes twinkle {
+                0%, 100% { opacity: 0.3; transform: scale(0.3); }
+                50% { opacity: 1; transform: scale(1.2); }
+            }
+	    </style>
+	</head>
+
+
+	<body>
+	    <div class="container">
+	        <!-- 顶部固定区域 -->
+	        <div class="header">
+	            <div class="header-icon">
+	                <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/title.svg" alt="logo" class="header-icon" style="margin-right:8px;vertical-align:middle;">
+	            </div>
+	        </div>
+	        <!-- 中间图片区域 -->
+			<div class="image-wrapper"> 
+	            <div class="image-container">
+	                <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/photos/贝贝.jpg" alt="宠物照片" class="pet-image">
+			    	<!-- 星星容器 -->
+			    	<div class="galaxy-container" id="galaxyContainer"></div>
+			    	<!-- 图片底部渐变遮罩 -->
+	                <div class="image-overlay"></div>
+	    
+	                <!-- 音乐开关 -->
+	                <div class="music-toggle" id="musicToggle">
+                    <!-- <span class="music-tip">点击听听ta的呼噜声 👉</span> -->
+                    <img
+                      id="musicIcon"
+                      src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-on.svg"
+                      alt="音乐开关"
+                      style="width:24px;height:24px;"
+                    >
+                    </div>
+	                <!-- 宠物基本信息 - 左下角且左对齐 -->
+	                <div class="pet-info">
+	                    <div class="pet-name">贝贝</div>
+	                    <div class="pet-details">
+	                        <div> 2014/03/16 ～ 2024/08/15</div>
+	                    </div>
+	                </div>
+	            </div>
+			</div>
+	        <!-- 底部文字描述区域 -->
+	        <div class="description">
+	            <div class="description-text-wrapper">
+	                <p class="description-text">
+	                    谢谢你陪我走过的每一天<br>
+	                    永远爱你
+	                </p>
+	            </div>
+	            <div class="footer-wrapper">
+	                <div class="footer">
+	                    <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/logo.svg" alt="logo" class="brand-logo">
+	                    <span class="copyright-text">© 2025 Purr Land All Rights Reserved</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- 背景音乐 -->
+	    <audio id="bgMusic" loop>
+	        <source src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/Rememberme.mp3" type="audio/mpeg">
+	    </audio>
+	    <script>
+	        document.addEventListener('DOMContentLoaded', function() {
+	            // 获取音乐元素和开关
+	            const bgMusic = document.getElementById('bgMusic');
+	            const musicToggle = document.getElementById('musicToggle');
+	            const musicIcon = document.getElementById('musicIcon');
+	            const musicOnSrc = 'https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-on.svg';
+                const musicOffSrc = 'https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/icons/music-off.svg';
+				let isMusicPlaying = false;
+
+	            // 设置音乐图标状态
+                function setMusicIcon(isPlaying) {
+                    musicIcon.src = isPlaying ? musicOnSrc : musicOffSrc;
+                }
+            
+                // 初始化时显示关闭状态
+                setMusicIcon(false);
+
+				// 点击事件处理
+        		musicToggle.addEventListener('click', function() {
+        		    if (isMusicPlaying) {
+        		        bgMusic.pause();
+        		        setMusicIcon(false);
+        		    } else {
+        		        bgMusic.play().catch(e => {
+        		            console.log('自动播放被阻止，需要用户交互才能播放音乐', e);
+        		        });
+        		        setMusicIcon(true);
+        		    }
+        		    isMusicPlaying = !isMusicPlaying;
+        		});
+
+	            // 处理图片加载和裁剪
+	            const petImage = document.querySelector('.pet-image');
+	            petImage.addEventListener('load', function() {
+	                // 图片加载完成后，确保它正确显示
+	                const container = document.querySelector('.image-container');
+	                const containerRatio = container.clientWidth / container.clientHeight;
+	                const imageRatio = petImage.naturalWidth / petImage.naturalHeight;
+	                // 如果图片太长，object-fit: cover 会自动裁剪
+	                if (imageRatio > containerRatio) {
+	                    petImage.style.objectPosition = 'center top';
+	                }
+	            });
+	        });
+
+            // 使用立即执行函数，避免重复执行
+                (function() {
+                    // 检查是否已经初始化
+                    if (window.galaxyInitialized) return;
+                    window.galaxyInitialized = true;
+                    
+                    // 初始化鼠标位置变量
+                    let mouseX = -1000, mouseY = -1000;
+                    
+                    // 等待DOM加载完成
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', initGalaxy);
+                    } else {
+                        initGalaxy();
+                    }
+                    
+                    function initGalaxy() {
+                        console.log('初始化星系'); // 添加调试信息
+                        
+                        // 创建星系
+                        createGalaxy();
+                        
+                        // 添加鼠标交互
+                        const galaxyContainer = document.getElementById('galaxyContainer');
+                        if (!galaxyContainer) {
+                            console.error('找不到星系容器元素');
+                            return;
+                        }
+                        
+                        // 监听鼠标移动
+                        document.addEventListener('mousemove', function(e) {
+                            const rect = galaxyContainer.getBoundingClientRect();
+                            mouseX = e.clientX - rect.left;
+                            mouseY = e.clientY - rect.top;
+                        });
+                    }
+                    
+                    function createGalaxy() {
+                        const container = document.getElementById('galaxyContainer');
+                        if (!container) {
+                            console.error('找不到星系容器元素');
+                            return;
+                        }
+                        
+                        // 清空容器
+                        container.innerHTML = '';
+                        
+                        const containerWidth = container.clientWidth || window.innerWidth;
+                        const containerHeight = container.clientHeight || 540; // 默认高度
+                        
+                        console.log('容器尺寸:', containerWidth, 'x', containerHeight); // 添加调试信息
+                        
+                        // 星星数量
+                        const starCount = 40;
+                        
+                        // 创建星星
+                        for (let i = 0; i < starCount; i++) {
+                            createStar(container, containerWidth, containerHeight, mouseX, mouseY);
+                        }
+                    }
+                    
+                    function createStar(container, width, height, mouseX, mouseY) {
+                        // 创建星星元素
+                        const star = document.createElement('div');
+                        star.className = 'star';
+                        
+                        // 随机大小 (1px - 5px)
+                        const size = 1 + Math.random() * 3;
+                        star.style.width = `${size}px`;
+                        star.style.height = `${size}px`;
+                        
+                        // 随机位置
+                        const x = Math.random() * width;
+                        const y = Math.random() * height;
+                        star.style.left = `${x}px`;
+                        star.style.top = `${y}px`;
+                        
+                        // 随机颜色
+                        const colors = ['#ffffff', '#FFE369', '#A7FFFF','#FFCCFF'];
+                        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        // 随机透明度
+                        star.style.opacity = 0.1 + Math.random() * 0.4;
+                        
+                        // 添加闪烁动画
+                        const duration = 1 + Math.random() * 3;
+                        const delay = Math.random() * 3;
+                        star.style.animation = `twinkle ${duration}s infinite ${delay}s`;
+                        
+                        // 添加到容器
+                        container.appendChild(star);
+                        
+                        // 添加移动效果
+                        let vx = (Math.random() - 0.6) * 1;
+                        let vy = (Math.random() - 0.6) * 1;
+                        
+                        // 更新星星位置
+                        function updatePosition() {
+                            // 获取当前位置
+                            let currentX = parseFloat(star.style.left);
+                            let currentY = parseFloat(star.style.top);
+                            
+                            // 更新位置
+                            currentX += vx;
+                            currentY += vy;
+                            
+                            // 边界检查
+                            if (currentX < 0) currentX = width;
+                            if (currentX > width) currentX = 0;
+                            if (currentY < 0) currentY = height;
+                            if (currentY > height) currentY = 0;
+                            
+                            // 应用新位置
+                            star.style.left = `${currentX}px`;
+                            star.style.top = `${currentY}px`;
+                            
+                            // 减速 (模拟阻力)
+                            vx *= 0.99;
+                            vy *= 0.99;
+                            
+                            // 继续动画
+                            requestAnimationFrame(updatePosition);
+                        }
+                        
+                        // 开始动画
+                        updatePosition();
+                    }
+                })();
+        </script>
+	</body>
+	</html>
