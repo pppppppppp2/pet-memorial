@@ -51,7 +51,7 @@
             .image-container {
                 position: relative;
                 width: 100%;  /* 改为 100%，因为父元素已经控制宽度 */
-                aspect-ratio: 3/4;
+				aspect-ratio: 4/5;
                 border-radius: 16px;
                 overflow: hidden; /* 仍然可以裁剪内部内容 */
             }
@@ -114,7 +114,7 @@
                font-weight: 700;
                line-height: normal;
                text-transform: capitalize;
-	        }
+            }            
 	        .pet-details {
                color: #FFF;
                font-size: 14px;
@@ -186,10 +186,10 @@
                 position: absolute;
                 background-color: #fff;
                 border-radius: 50%;
-				box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8), 
-                            0 0 6px 1px rgba(255, 255, 255, 0.6),
-                            0 0 20px 2px rgba(255, 255, 255, 0.2);
-                filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
+				box-shadow: 0 0 4px 2px rgba(255, 249, 166, 0.5), 
+                            0 0 6px 4px rgba(255, 249, 166, 0.3),
+                            0 0 20px 6px rgba(255, 249, 166, 0.2);
+                filter: drop-shadow(0 0 4px rgba(255, 249, 166, 0.1));
                 width: 1px;
                 height: 1px;
             }
@@ -214,7 +214,7 @@
 	        <!-- 中间图片区域 -->
 			<div class="image-wrapper"> 
 	            <div class="image-container">
-	                <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/photos/贝贝.jpg" alt="PET IMAGE" class="pet-image">
+	                <img src="https://cdn.jsdelivr.net/gh/pppppppppp2/pet-memorial@main/photos/贝贝.jpg" alt="pet-image" class="pet-image">
 			    	<!-- 星星容器 -->
 			    	<div class="galaxy-container" id="galaxyContainer"></div>
 			    	<!-- 图片底部渐变遮罩 -->
@@ -357,7 +357,7 @@
                         console.log('容器尺寸:', containerWidth, 'x', containerHeight); // 添加调试信息
                         
                         // 星星数量
-                        const starCount = 40;
+                        const starCount = 30;
                         
                         // 创建星星
                         for (let i = 0; i < starCount; i++) {
@@ -371,7 +371,7 @@
                         star.className = 'star';
                         
                         // 随机大小 (1px - 5px)
-                        const size = 1 + Math.random() * 3;
+                        const size = 1 + Math.random() * 4;
                         star.style.width = `${size}px`;
                         star.style.height = `${size}px`;
                         
@@ -382,15 +382,15 @@
                         star.style.top = `${y}px`;
                         
                         // 随机颜色
-                        const colors = ['#ffffff', '#ffffcc', '#ccffff', '#ffccff', '#ccffcc'];
+                        const colors = ['#FFF','#FFF9A6' ];
                         star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                         
                         // 随机透明度
-                        star.style.opacity = 0.1 + Math.random() * 0.4;
+                        star.style.opacity = 0.1 + Math.random() * 0.5;
                         
                         // 添加闪烁动画
                         const duration = 1 + Math.random() * 3;
-                        const delay = Math.random() * 3;
+                        const delay = Math.random() * 6;
                         star.style.animation = `twinkle ${duration}s infinite ${delay}s`;
                         
                         // 添加到容器
